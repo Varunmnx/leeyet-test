@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+    </script>
+</head>
+<body>
+    
+    <h1>Upload multiple images</h1>
+
+    <form action="/products/add" enctype="multipart/form-data"  method="POST">
+        <input placeholder="enter product name" type="text" value="" id="productname" name="productname" required/>
+        <br/>
+        <input placeholder="provide description" type="text" value="" id="des" name="description" required/>
+        <br/>
+
+        <input placeholder="enter product price" type="number" name="price" id="price" value="" required/>
+        <br/>
+
+        <input type="file" multiple name="images" id="filein" value="" required/>
+        <br/>
+
+        <input type="submit" />
+    </form>
+
+   <% for (var key in allproductswithImages) { %>
+    <div style="height:auto;width:400px;display:flex;align-items:center;justify-content:center;flex-direction:column ; border: solid 1px black; margin: 40px !important;">
+                <h3><%= allproductswithImages[key].name %></h3>
+                <h3><%= allproductswithImages[key].description %></h3>
+                <h3><%= allproductswithImages[key].price %></h3>
+                <%for (var pim in allproductswithImages[key].ProductImages) {%>
+                    <img style="height: 300px; width: 300px; margin: 10px !important;"  src="data:<%=allproductswithImages[key].ProductImages[pim].contentType%>;base64,<%=allproductswithImages[key].ProductImages[pim].imageBase64%>" />
+                <% } %>
+   </div>
+   <% } %>
+
+</body>
+</html>
