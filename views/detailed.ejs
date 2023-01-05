@@ -17,8 +17,11 @@
                     <br>
                     <input value="<%=product.Price%>" name="price" id="price" /> 
                     <br>
+                    <span>Add more images</span>
+                    <input type="file" multiple id="files" name="images"/> <br>
+                    <span>current Images</span> <br>
                     <% for (var key in product.ProductImages) { %>
-                        <input type="file" multiple id="files" name="images"/>
+  
                         <span><%=product.ProductImages[key].filename%></span>
                         <br>
                 <% } %>
@@ -32,7 +35,7 @@
               <input id="imageId" hidden value="<%=product.ProductImages[key].id%>"/>
          <% } %>
   
-
+         <hr>
          <button id="deleteItem"> DELETE ITEM </button>
     </div>
 </body>
