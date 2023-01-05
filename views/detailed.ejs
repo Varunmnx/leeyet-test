@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div>
+        <form  enctype="multipart/form-data">
+                    <input hidden value="<%= product.id %>" name="pid" id="pid"/>
+                    <input value="<%= product.name %>" name="name" id="name"/>
+                    <br>
+                    <input value="<%=product.description%>" name="description" id="description"/>
+                    <br>
+                    <input value="<%=product.Price%>" name="price" id="price" /> 
+                    <br>
+                    <% for (var key in product.ProductImages) { %>
+                        <input type="file" multiple id="files" name="images"/>
+                        <span><%=product.ProductImages[key].filename%></span>
+                        <br>
+                <% } %>
+                <input type="submit" id="updater"/>
+    </form>
+
+         
+         <% for (var key in product.ProductImages) { %>
+              <img height="200px" width="200px" src="data:<%=product.ProductImages[key].contentType%>;base64,<%=product.ProductImages[key].imageBase64%>"/>
+              <button id="deleteimage" onclick="deleteImage()">delete image</button>
+              <input id="imageId" hidden value="<%=product.ProductImages[key].id%>"/>
+         <% } %>
+  
+
+         <button id="deleteItem"> DELETE ITEM </button>
+    </div>
+</body>
+<script>
+document.getElementById("updater").addEventListener('click',(e)=>{
+    e.preventDefault()
+    console.log("clicked")
+    updateProduct()
+    return false
+})
+
+function updateProduct(){
+    let files = document.getElementById('files')
+    let fl =files.files.length
+    let upfs = new FormData()
+    let pid = document.getElementById("pid").value
+    for(let i=0;i<fl ;i++){
+       upfs.append('images',files.files[i])
+    }
+    upfs.append('name',document.getElementById("name").value)
+    upfs.append("description",document.getElementById("description").value)
+    upfs.append("price",document.getElementById("price").value)
+    fetch("/products/"+pid+"",{
+        method:"put",
+        body:upfs
+    }).then(res=>{
+        window.location = "/"
+        return res.json()}).then(out=>console.log(out))
+}
+
+
+document.getElementById("deleteItem").addEventListener('click',()=>{
+    let prId = document.getElementById("pid").value
+    fetch("/products/"+prId+"",{
+        method:"DELETE",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            id:document.getElementById("pid").value
+        })
+    }).then(res=>{
+        window.location ="/"
+        return res.json()}).then(out=>console.log(out))
+})
+
+
+ const deleteImage =()=>{
+    let  imId = document.getElementById("imageId").value
+    console.log(imId)
+    fetch("/products/images/"+imId+"",{
+        method:"DELETE",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            id:imId
+        })
+    }).then(res=>{
+        window.location ="/"
+        return res.json()}).then(out=>console.log(out))
+}
+
+</script>
+</html>
