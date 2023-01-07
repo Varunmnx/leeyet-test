@@ -1,6 +1,6 @@
 # leeyet-test
-kindly ignore the naive security approch  of including the .env file in repo 
-
+ 
+## your DB_URL goes here
 ```
 DATABASE_URL = ""
 ```
